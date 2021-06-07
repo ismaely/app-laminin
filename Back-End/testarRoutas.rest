@@ -1,0 +1,25 @@
+### accesso via get
+GET http://localhost:5000/listar-produto
+###
+GET http://localhost:5000/login
+### registar o consultor
+POST http://localhost:5000/registar-consultor
+Content-Type: application/Json
+
+{
+"nome": "sofia",
+"email": "sof@gmail.com",
+"password": "09wewqe"
+}
+### registar o produto
+POST http://localhost:5000/registar-produto
+Content-Type: application/Json
+
+{
+"mercado": "luanda",
+"nome_produto": "milho",
+"preco_produto": "1400kz"
+}
+###
+GET http://localhost:5000/pesquisa/madeira
+###
