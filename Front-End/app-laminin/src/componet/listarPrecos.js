@@ -13,7 +13,7 @@ const Lista = (props) => {
     <td>{props.dados.mercado}</td>
     <td>{props.dados.nome_produto}</td>
     <td>{props.dados.data_insercao}</td>
-    <td>{props.dados.preco_produto}</td>
+    <td>{props.dados.preco_produto} Kz</td>
   </tr>;
 };
 export default class ListarPreco extends Component {
@@ -43,7 +43,7 @@ export default class ListarPreco extends Component {
           <td>{items.mercado}</td>
           <td>{items.nome_produto}</td>
           <td>{moment(items.data_insercao).format("DD/MM/YYYY")}</td>
-          <td>{items.preco_produto}</td>
+          <td>{items.preco_produto}Kz</td>
         </tr>
       );
     });

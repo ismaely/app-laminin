@@ -1,118 +1,156 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { BrowserRouter, Redirect } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Alert, InputGroup, FormControl } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavHeder from "../componet/navbar";
+import { useFormik, Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
-export default class Consultor extends Component {
-  constructor(props) {
-    super(props);
 
-    this.onChangeNome = this.onChangeNome.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+const Consultor = () => {
+  const formik = useFormik({
 
-    this.state = {
-      nome: "",
-      email: "",
-      password: "",
-    };
-  }
+    initialValues: {
+      nome: '',
+      email: '',
+      password: '',
 
-  onChangeNome(e) {
-    this.setState({
-      nome: e.target.value,
-    });
-  }
+    },
 
-  onChangeEmail(e) {
-    this.setState({
-      email: e.target.value,
-    });
-  }
+    validationSchema: Yup.object({
 
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value,
-    });
-  }
+      nome: Yup.string()
+        .min(3, 'O nome é curto...')
+        .required('O Campo é obrigatorio'),
 
-  // enviar os dados
-  onSubmit(e) {
-    e.preventDefault();
+      email: Yup.string().email('Email invalido').required('campo obrigatorio'),
 
-    const dados = {
-      nome: this.state.nome,
-      email: this.state.email,
-      password: this.state.password,
-    };
+      password: Yup.string()
+        .min(4, 'A senha é muito curta...!')
+        .required('campo obrigatorio'),
 
-    axios
-      .post("http://localhost:5000/registar-consultor", dados)
-      .then((res) => {
-        if (res.data != null) {
-          alert("registro realizado com sucesso");
-          this.props.history.push("/home");
-        }
+
+    }),
+
+    onSubmit: values => {
+
+      axios
+        .post("http://localhost:5000/registar-consultor", values)
+        .then((res) => {
+          if (res.data != null) {
+            alert("registro realizado com sucesso");
+            window.location.href = '/home'
+            //this.props.history.push("/home");
+          }
+        });
+
+      this.initialValues({
+        nome: "",
+        email: "",
+        password: "",
       });
+    },
 
-    this.setState({
-      nome: "",
-      email: "",
-      password: "",
-    });
-  }
+  });
 
-  render() {
-    return (
-      <Container>
-        <NavHeder />
-        <Row style={{ marginTop: "100px" }}>
-          <Col md={{ span: 6, offset: 3 }}>
-            <div style={{ marginTop: 30 }}>
-              <h3>Registar Consultor</h3>
-              <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <label>Nome: </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.nome}
-                    onChange={this.onChangeNome}
-                  />
+
+
+
+  return (
+
+    <Container>
+      <NavHeder />
+      <Row style={{ marginTop: "100px" }}>
+        <Col md={{ span: 6, offset: 3 }}>
+          <div style={{ marginTop: 30 }}>
+            <h3>Registar Consultor</h3>
+            <form onSubmit={formik.handleSubmit}>
+
+
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Nome: </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  id="nome"
+                  name="nome"
+                  type="text"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.nome}
+                />
+              </InputGroup>
+              {formik.touched.nome && formik.errors.nome ? (
+                <div>
+                  <Alert variant="danger">
+                    {formik.errors.nome}
+                  </Alert>
                 </div>
-                <div className="form-group">
-                  <label>Email: </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.email}
-                    onChange={this.onChangeEmail}
-                  />
+              ) : null}
+              <br />
+
+
+
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Email:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  id="email"
+                  name="email"
+                  type="email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email} />
+              </InputGroup>
+              {formik.touched.email && formik.errors.email ? (
+                <div>
+                  <Alert variant="danger">
+                    {formik.errors.email}
+                  </Alert>
                 </div>
-                <div className="form-group">
-                  <label>password: </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
-                  />
+              ) : null}
+
+              <br />
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+
+                  <InputGroup.Text>Password:</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl type="password"
+                  id="password"
+                  name="password"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password} />
+              </InputGroup>
+              {formik.touched.password && formik.errors.password ? (
+                <div>
+                  <Alert variant="danger">
+                    {formik.errors.password}
+                  </Alert>
                 </div>
-                <div className="form-group">
-                  <input
-                    type="submit"
-                    value="Registar"
-                    className="btn btn-primary"
-                  />
-                </div>
-              </form>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-}
+              ) : null}
+
+
+              <div className="form-group">
+                <input
+                  type="submit"
+                  value="Registar"
+                  className="btn btn-primary"
+                />
+              </div>
+
+
+            </form>
+          </div>
+        </Col>
+      </Row>
+    </Container>
+
+  );
+
+};
+
+export default Consultor;

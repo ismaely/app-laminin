@@ -5,6 +5,8 @@ import { Navbar, Container, Row, Col, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavHeder from "../componet/navbar";
 import Logo from "../img/lamini.png";
+import { useFormik, Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 export default class Login extends Component {
   constructor(props) {
@@ -67,19 +69,24 @@ export default class Login extends Component {
     return (
       <Container>
         <NavHeder />
-        <Row style={{ marginTop: "100px" }}>
-          <Col sm={8}>
+
+        <Row style={{ marginTop: "80px" }}>
+          <Col md={{ span: 5, offset: 4 }}>
             <img src={Logo} alt="logos" />
           </Col>
+        </Row>
 
-          <Col sm={4}>
-            <h3>Login User</h3>
+        <Row style={{ marginTop: "30px" }}>
+
+          <Col md={{ span: 5, offset: 4 }}>
+            <h3> Login</h3>
             <Card bg="">
               <form onSubmit={this.onSubmit}>
                 <p></p>
                 <div className="form-group">
                   <label>Email: </label>
                   <input
+                    required
                     type="email"
                     className="form-control"
                     value={this.state.email}
@@ -89,6 +96,7 @@ export default class Login extends Component {
                 <div className="form-group">
                   <label>password: </label>
                   <input
+                    required
                     type="password"
                     className="form-control"
                     value={this.state.password}
@@ -96,14 +104,19 @@ export default class Login extends Component {
                   />
                 </div>
                 <Card.Body>
-                  <Card.Text></Card.Text>
-                  <div className="form-group">
-                    <input
-                      type="submit"
-                      value="Registar"
-                      className="btn btn-primary"
-                    />
-                  </div>
+
+                  <Row >
+                    <Col md={12}>
+                      <div className="form-group">
+                        <input
+                          type="submit"
+                          value="Login"
+                          className="btn btn-primary"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+
                 </Card.Body>
               </form>
             </Card>
